@@ -9,8 +9,64 @@ Run multiple classes:
 mvn test -Dtest=Class1,Class2
 Run all tests in a specific package:
 mvn test -Dtest="com.example.package.*"
+=============================
+what will happen for pojo class if the response contains Arrays ?
+
+When a JSON response contains an array (denoted by []), your POJO class must represent that field using either a Java List (e.g., List<String>) or a standard Java Array (e.g., String[]).
+
+When a JSON response contains an array (denoted by []), your POJO class must represent that field using either a Java List (e.g., List<String>) or a standard Java Array (e.g., String[]).
+
+POJO:
+
+Java
+public class ResponsePojo {
+    private String status;
+    private List<String> types; // Maps the ["shoe park", "shop"] array
+
+    // Getters and Setters
+    public List<String> getTypes() { return types; }
+    public void setTypes(List<String> types) { this.types = types; }
+}
+
+2. How to Map an Array of Objects (Complex JSON)
+{
+    "locations": [
+        { "lat": -38.38, "lng": 33.42 },
+        { "lat": -32.34, "lng": 30.42 }
+    ]
+}
 
 
+POJO structure:
+
+Java
+public class RootPojo {
+    private List<Location> locations; // List of another POJO class
+
+    public List<Location> getLocations() { return locations; }
+}
+
+public class Location {
+    private double lat;
+    private double lng;
+    // Getters and Setters
+}
+
+3. Impact on your Test Scripts
+When the response is a List, you can use Java 8 Streams (which we discussed earlier) to perform powerful assertions.
+
+Example: Verifying a specific value exists in the array:
+
+Java
+ResponsePojo response = given()...extract().as(ResponsePojo.class);
+
+// Use Java 8 Stream to check if "shoe park" is in the types list
+boolean hasShop = response.getTypes().stream()
+                 .anyMatch(t -> t.equalsIgnoreCase("shoe park"));
+
+Assert.assertTrue(hasShop, "Expected type not found in response!");
+
+==================================================================
 Q) public static void main(String[] args)
 public-->access specifier
 public makes it globally available. It is made public so that JVM can invoke it from outside the class as it is not present in the current class.
