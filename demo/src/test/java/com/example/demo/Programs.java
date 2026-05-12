@@ -8,6 +8,7 @@ public class Programs {
 		ascendingOrder();
 		descendingOrder();
 		removeDuplicate();
+		findSumOfNumberInArray();
 
 	}
 
@@ -53,6 +54,18 @@ public class Programs {
 				sb.append(map.getKey()).append(map.getValue());
 			}
 		}
-		System.out.print("Count the value and output in key Value format " +sb);
+		System.out.println("Count the value and output in key Value format " +sb);
+	}
+	
+	public static void findSumOfNumberInArray() {
+		String[] a = {"abc123","bcd234"};
+		int totalSum = 0;
+		for(String s : a) {
+			String digits = s.replaceAll("[^0-9]","");
+			if (!digits.isEmpty()) {
+	            totalSum += Integer.parseInt(digits);
+	        }
+		}
+		System.out.println("Sum of number is array is " +totalSum);
 	}
 }
