@@ -25,7 +25,7 @@ public class TestResponse {
         // 2. Set Up Request
         RestAssured.baseURI = "https://rahulshettyacademy.com";
         
-        // Fix: Initialize RequestSpecification
+        // Fix: Initialize RequestSpecification ===
         ResponsePojo response = given() 
         .log().all()
         .contentType(ContentType.JSON) // Better way to set header

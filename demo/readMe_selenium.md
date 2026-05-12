@@ -1,14 +1,10 @@
-Common Commands
-Run a single test class:
-mvn test -Dtest=ClassName
-Run a specific test method in a class:
-mvn test -Dtest=ClassName#methodName
-Run multiple specific methods in one class:
-mvn test -Dtest=ClassName#method1+method2
-Run multiple classes:
-mvn test -Dtest=Class1,Class2
-Run all tests in a specific package:
-mvn test -Dtest="com.example.package.*"
+
+# Selenium 4 is faster primarily because it adopts the W3C WebDriver standard for direct browser communication, eliminating the need for a separate JSON Wire Protocol.
+### W3C WebDriver Standardization: Selenium 4 removes the "JSON Wire Protocol" dependency, which was used in Selenium 3 to encode/decode requests. Instead, it communicates directly with browser drivers (like ChromeDriver) using the same W3C protocol, reducing the overhead in communication between test scripts and the browser.
+### Direct Browser Communication (CDP): Selenium 4 provides native support for the Chrome DevTools Protocol (CDP), allowing developers to use performance tools and network interception features directly, reducing network delays.
+### Improved Grid Architecture: The Selenium Grid was completely redesigned. It supports Docker natively, allowing for rapid deployment, better parallel test execution, and reduced latency when managing multiple nodes.
+### Reduced Memory Footprint: The framework has been optimized for better performance, with reports suggesting up to 50% less memory usage, which increases speed on restricted hardware.
+### Enhanced Stability: By decreasing the likelihood of browser driver incompatibility, tests are less likely to fail or "flake," which saves time by reducing the need for re-runs
 =============================
 what will happen for pojo class if the response contains Arrays ?
 
@@ -125,7 +121,7 @@ Interface:
 1. It a contract where all  methods must implement.
 2. All methods in interface have abstract and must be implemented by any class that implement the interface.
 3. interface can have only public access.
-4. Interface cannnot have member variables.
+4. Interface cannot have member variables.
 5. Only final and static variables.
 6. Implement using implements keyword
 7. Multiple inheritance can be achive using interface, but not with abstrat class.
@@ -276,16 +272,15 @@ runtest cases parallaly
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+============================   
+# How To Run Failed Test Cases Using TestNG In Selenium WebDriver
+ Ans : IRetryAnalyzer
         
-        How To Run Failed Test Cases Using TestNG In Selenium WebDriver
-        Ans : IRetryAnalyzer
-        
-        ============================
-        TestNG skip the test cases
-        by using
+       
+# TestNG skip the test cases
 @Test(enable=false)
 
------>Grouing the test cases
+# Grouing the test cases
 @Test(groups={"smoke","sanity"})
 <suite name = "MytestSuite">
 <test name ="Mytest">
@@ -301,7 +296,7 @@ runtest cases parallaly
    </suite>
    
    ===============================
-   preserve-order 
+# preserve-order 
    If you want the classes and methods listed in this file to be run in an unpredictable order, set the preserve-order attribute to false,
    In TestNg bydefault the preserve-order attribute will be set to 'true', this means, TestNG will run your tests in the order they are found in the XML file.
    
@@ -309,11 +304,11 @@ runtest cases parallaly
    exclude tag
    TestNG is a testing framework and can use Maven as build tool. It helps to maintain dependencies and their version at one place in pom.xml
 
-Maven provides flexibility to include or exclude a test group at run time. User can exclude test group or groups at run time in maven using surefire plugin.
+## Maven provides flexibility to include or exclude a test group at run time. User can exclude test group or groups at run time in maven using surefire plugin.
 
 In this tutorial, we will illustrate how to exclude a test group via surefire at runtime.
 
-========================Cross browser testing================
+#Get css value
 Handle color in selenium webdriver
 WebElement eleSearch = driver.findElement(By.xpath("//*[@class='navsearchbar']//div[2]//div"));
 
@@ -322,7 +317,7 @@ String rgbFormat = eleSearch.getCssValue("background-color");
 System.out.println(rgbFormat);  
 
 =================================================
-Explain how you can use recovery scenario with Selenium?
+# Explain how you can use recovery scenario with Selenium?
 By using the try,catch block we can recover the recovery scenario.
 =============================================================
  List out the technical challenges with Selenium?
@@ -333,3 +328,110 @@ It does not support the Bitmap comparison
 For any reporting related capabilities have to depend on third party tools
 No vendor support for tool compared to commercial tools like HP UFT
 As there is no object repository concept in Selenium, maintainability of objects becomes difficult
+
+#How to achive cross browser testing in selenium ?
+1. The Strategy: TestNG XML + Parameterization
+
+2. Implementation: The BaseTest Class
+
+public class BaseTest {
+    public WebDriver driver;
+
+    @Parameters("browserName") // Matches the name in testng.xml
+    @BeforeMethod
+    public void setup(String browser) {
+        
+        if (browser.equalsIgnoreCase("chrome")) {
+            WebDriverManager.chromedriver().setup();
+            driver = new ChromeDriver();
+        } 
+        else if (browser.equalsIgnoreCase("firefox")) {
+            WebDriverManager.firefoxdriver().setup();
+            driver = new FirefoxDriver();
+        } 
+        else if (browser.equalsIgnoreCase("edge")) {
+            WebDriverManager.edgedriver().setup();
+            driver = new EdgeDriver();
+        }
+
+        driver.manage().window().maximize();
+        driver.get("https://your-app-url.com");
+    }
+
+    @AfterMethod
+    public void tearDown() {
+        if (driver != null) {
+            driver.quit();
+        }
+    }
+}
+
+3. The testng.xml Configuration
+<?xml version="1.0" encoding="UTF-8"?>
+<suite name="CrossBrowserSuite" parallel="tests" thread-count="2">
+    
+    <test name="ChromeTest">
+        <parameter name="browserName" value="chrome" />
+        <classes>
+            <class name="com.example.tests.LoginTest" />
+        </classes>
+    </test>
+
+    <test name="FirefoxTest">
+        <parameter name="browserName" value="firefox" />
+        <classes>
+            <class name="com.example.tests.LoginTest" />
+        </classes>
+    </test>
+
+</suite>
+=========================
+class BaseTest {
+   public void setup() {
+       System.out.println("Setup");
+   }
+}
+class MyTest extends BaseTest {
+   protected void setup() {
+       System.out.println("Custom setup");
+   }
+MyTest myTest = new MyTest();
+myTest.setup();
+ 
+}
+# Ans
+The code you provided will cause a compilation error. 
+In Java, when you override a method, you cannot provide a more restrictive access modifier than the one defined in the parent class.
+
+=====================================================================================
+ void test(int a, double b) 
+ { 
+     System.out.println(a);
+     
+ }
+
+void test(double a, int b) {
+    System.out.println(a);
+    
+}
+# Ans
+This is a classic example of method overloading that can lead to an ambiguous call error.
+While the method definitions themselves are perfectly valid, the problem occurs when you try to call them with two integers, like this:
+==================================
+class A {
+ 
+ 
+  static void show() {
+      System.out.println("A");
+  }
+}
+class B extends A {
+  static void show() {
+      System.out.println("B");
+  }
+}
+A obj = new B();
+obj.show();
+#Ans
+he output will be A.
+This is because show() is a static method. In Java, static methods do not participate in runtime polymorphism (overriding); instead, they undergo method hiding.

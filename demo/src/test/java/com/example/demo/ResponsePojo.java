@@ -22,7 +22,9 @@ public class ResponsePojo {
 		this.status = status;
 	}
 	public String getPlaceId() { return placeId; }
-    public void setPlaceId(String placeId) { this.placeId = placeId; }
+    public void setPlaceId(String placeId) { 
+    	this.placeId = placeId; 
+    	}
 	public void setscope(String scope) {
 		this.scope = scope;
 	}

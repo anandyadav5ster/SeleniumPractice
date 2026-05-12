@@ -1,4 +1,7 @@
 package com.example.demo;
+import org.testng.annotations.Test;
+
+import io.restassured.RestAssured;
 import io.restassured.response.Response;
 
 
@@ -9,8 +12,8 @@ public class TokenTest {
     Response response;
 
     @Test
-    public getResponse(){
-        response = given().auth().oauth2(token)
+    public void getResponse(){
+        response = RestAssured.given().auth().oauth2(token)
         .when()
         .get("https://example.com/protected/resource")
         .then()
